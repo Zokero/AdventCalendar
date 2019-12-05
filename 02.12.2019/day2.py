@@ -63,14 +63,34 @@
 # replace position 2 with the value 2. What value is left at position 0 after the program halts?
 
 
-
-def getInputData():
-    file = open('/Users/piotrkuk/Documents/git-repos/advent/02.12.2019/dataInput.txt','r')
+def get_input_data():
+    file = open('E:\\git-repos\\AdventCalendar\\02.12.2019\\dataInput.txt', 'r')
     return file.read().split(',')
 
-def printsth(values):
-    for i in values:
-        print(i)
 
-# print(getInputData())
-printsth(getInputData())
+def check_intcode(values, index):
+    copy_value = values
+    if int(copy_value[index]) == 1:
+        index_plus_one_value = int(copy_value[index + 1])
+        index_plus_two_value = int(copy_value[index + 2])
+        result = int(copy_value[index_plus_one_value]) + int(copy_value[index_plus_two_value])
+        copy_value[int(copy_value[index + 3])] = result
+
+    elif int(copy_value[index]) == 2:
+        index_plus_one_value = int(copy_value[index + 1])
+        index_plus_two_value = int(copy_value[index + 2])
+        result = int(copy_value[index_plus_one_value]) * int(copy_value[index_plus_two_value])
+        copy_value[int(copy_value[index + 3])] = result
+
+    elif int(copy_value[index]) == 99:
+        print(copy_value)
+        return copy_value
+    return check_intcode(copy_value, index + 4)
+
+
+assert check_intcode([1, 9, 10, 3, 2, 3, 11, 0, 99, 30, 40, 50], 0) == [3500, 9, 10, 70, 2, 3, 11, 0, 99, 30, 40, 50]
+assert check_intcode([1, 0, 0, 0, 99], 0) == [2, 0, 0, 0, 99]
+assert check_intcode([2, 4, 4, 5, 99, 0], 0) == [2, 4, 4, 5, 99, 9801]
+assert check_intcode([1, 1, 1, 4, 99, 5, 6, 0, 99], 0) == [30, 1, 1, 4, 2, 5, 6, 0, 99]
+
+print(check_intcode(get_input_data(), 0))
