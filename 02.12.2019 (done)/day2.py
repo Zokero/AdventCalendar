@@ -64,33 +64,90 @@
 
 
 def get_input_data():
-    file = open('E:\\git-repos\\AdventCalendar\\02.12.2019\\dataInput.txt', 'r')
+    file = open('/02.12.2019 (done)/dataInput.txt', 'r')
     return file.read().split(',')
 
 
-def check_intcode(values, index):
+def generate_list_of_pairs():
+    new_list = list()
+    for i in range(0, 99):
+        for j in range(0, 99):
+            new_list.append([i, j])
+
+    return new_list
+
+
+def check_intcode(values, index, a, b):
     copy_value = values
+    # for i in range(0, 99):
+    #     for j in range(0, 99):
+    copy_value[1] = a
+    copy_value[2] = b
+
     if int(copy_value[index]) == 1:
         index_plus_one_value = int(copy_value[index + 1])
         index_plus_two_value = int(copy_value[index + 2])
+        # print(str((index_plus_one_value * 100) + index_plus_two_value))
         result = int(copy_value[index_plus_one_value]) + int(copy_value[index_plus_two_value])
         copy_value[int(copy_value[index + 3])] = result
 
     elif int(copy_value[index]) == 2:
         index_plus_one_value = int(copy_value[index + 1])
         index_plus_two_value = int(copy_value[index + 2])
+        # print(str((index_plus_one_value * 100) + index_plus_two_value))
         result = int(copy_value[index_plus_one_value]) * int(copy_value[index_plus_two_value])
         copy_value[int(copy_value[index + 3])] = result
 
     elif int(copy_value[index]) == 99:
         print(copy_value)
         return copy_value
-    return check_intcode(copy_value, index + 4)
+    print(copy_value)
+    if copy_value[0] == 19690720:
+        xxx = (100 * a) + b
+        print(xxx)
+        print("<<<<<<>>>>>>>")
+    return check_intcode(copy_value, index + 4, copy_value[1], copy_value[2])
 
 
-assert check_intcode([1, 9, 10, 3, 2, 3, 11, 0, 99, 30, 40, 50], 0) == [3500, 9, 10, 70, 2, 3, 11, 0, 99, 30, 40, 50]
-assert check_intcode([1, 0, 0, 0, 99], 0) == [2, 0, 0, 0, 99]
-assert check_intcode([2, 4, 4, 5, 99, 0], 0) == [2, 4, 4, 5, 99, 9801]
-assert check_intcode([1, 1, 1, 4, 99, 5, 6, 0, 99], 0) == [30, 1, 1, 4, 2, 5, 6, 0, 99]
+def test():
+    for i in range(0, 99):
+        for j in range(0, 99):
+            check_intcode(get_input_data(), 0, i, j)
 
-print(check_intcode(get_input_data(), 0))
+
+
+
+# assert check_intcode([1, 9, 10, 3, 2, 3, 11, 0, 99, 30, 40, 50], 0) == [3500, 9, 10, 70, 2, 3, 11, 0, 99, 30, 40, 50]
+# assert check_intcode([1, 0, 0, 0, 99], 0) == [2, 0, 0, 0, 99]
+# assert check_intcode([2, 4, 4, 5, 99, 0], 0) == [2, 4, 4, 5, 99, 9801]
+# assert check_intcode([1, 1, 1, 4, 99, 5, 6, 0, 99], 0) == [30, 1, 1, 4, 2, 5, 6, 0, 99]
+test()
+# check_intcode(get_input_data(), 0)
+
+# Programy Intkod są podane jako lista liczb całkowitych; wartości te są używane jako stan początkowy pamięci
+# komputera. Po uruchomieniu programu Intcode należy rozpocząć od zainicjowania pamięci na wartości programu.
+# Pozycja w pamięci nazywana jest adresem (na przykład pierwsza wartość w pamięci to „adres 0”).
+#
+# Kody (takie jak 1, 2 lub 99) oznaczają początek instrukcji. Wartości użyte bezpośrednio po kodzie op, jeśli występują,
+# są nazywane parametrami instrukcji. Na przykład w instrukcji 1, 2, 3, 4, 1 to kod operacji; 2, 3 i 4 są parametrami.
+# Instrukcja 99 zawiera tylko kod operacji i nie ma parametrów.
+#
+# Adres bieżącej instrukcji nazywany jest wskaźnikiem instrukcji; zaczyna się od 0. Po zakończeniu instrukcji wskaźnik
+# instrukcji zwiększa się o liczbę wartości w instrukcji; dopóki nie dodasz więcej instrukcji do komputera, zawsze jest
+# to 4 (1 kod operacji + 3 parametry) dla instrukcji dodawania i mnożenia. (Instrukcja zatrzymania zwiększyłaby wskaźnik
+# instrukcji o 1, ale zamiast tego zatrzymuje program.)
+#
+# „Nie znając terminologii, jesteśmy gotowi do kontynuowania. Aby ukończyć wspomaganie grawitacyjne, musisz ustalić,
+# która para sygnałów wejściowych daje wynik 19690720”.
+#
+# Dane wejściowe powinny być nadal dostarczane do programu, zastępując wartości pod adresami 1 i 2, tak jak poprzednio.
+# W tym programie wartość umieszczona w adresie 1 nazywana jest rzeczownikiem, a wartość umieszczona w adresie 2 nazywana
+# jest czasownikiem. Każda z dwóch wartości wejściowych będzie zawierać się między 0 a 99 włącznie.
+#
+# Po zatrzymaniu programu jego wyjście jest dostępne pod adresem 0, tak jak poprzednio. Za każdym razem, gdy spróbujesz
+# użyć pary wejść, pamiętaj, aby najpierw zresetować pamięć komputera do wartości w programie (układanki) - innymi słowy,
+# nie używaj ponownie pamięci z poprzedniej próby.
+#
+# Znajdź rzeczownik i czasownik, które powodują, że program generuje wynik 19690720.
+# Co to jest 100 * rzeczownik + czasownik?
+# (Na przykład, jeśli rzeczownik = 12 i czasownik = 2, odpowiedź będzie wynosić 1202.)

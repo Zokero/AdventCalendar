@@ -27,7 +27,7 @@
 
 
 def get_input_from_file():
-    file = open('E:\\git-repos\\AdventCalendar\\01.12.2019 (done)\\dataInput.txt', 'r')
+    file = open('/Users/piotrkuk/Documents/git-repos/advent/01.12.2019 (done)/dataInput.txt', 'r')
     return file.read().replace('\n', ' ').split(' ')
 
 
